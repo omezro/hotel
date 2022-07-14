@@ -7,7 +7,7 @@ aliyun-oss:
   base-path: yourBasePath
 autocode:
   transfer-restart: true
-  root: /usr/local/goprogram/hotel
+  root: /home/hotel
   server: /server
   server-api: /api/v1/%s
   server-plug: /plugin/%s
@@ -82,7 +82,7 @@ hua-wei-obs:
   access-key: you-access-key
   secret-key: you-secret-key
 jwt:
-  signing-key: 8455dc58-1b7b-4a90-ae95-30acf45f928c
+  signing-key: fd9e2c22-9947-4ed5-b859-a9a226900efe
   expires-time: 604800
   buffer-time: 86400
   issuer: qmPlus
@@ -95,7 +95,7 @@ mysql:
   config: charset=utf8mb4&parseTime=True&loc=Local
   db-name: gva
   username: root
-  password: yunhuan29
+  password: KmYt@travel
   max-idle-conns: 10
   max-open-conns: 100
   log-mode: error
