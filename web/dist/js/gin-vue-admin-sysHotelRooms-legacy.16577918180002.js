@@ -1,4 +1,0 @@
-/*! 
- Build based on gin-vue-admin 
- Time : 1657791818000 */
-System.register(["../gva/gin-vue-admin-index-legacy.1657791818000.js"],(function(t){"use strict";var e;return{setters:[function(t){e=t.s}],execute:function(){t("c",(function(t){return e({url:"/sysHotelRooms/createSysHotelRooms",method:"post",data:t})})),t("a",(function(t){return e({url:"/sysHotelRooms/deleteSysHotelRooms",method:"delete",data:t})})),t("d",(function(t){return e({url:"/sysHotelRooms/deleteSysHotelRoomsByIds",method:"delete",data:t})})),t("u",(function(t){return e({url:"/sysHotelRooms/updateSysHotelRooms",method:"put",data:t})})),t("f",(function(t){return e({url:"/sysHotelRooms/findSysHotelRooms",method:"get",params:t})})),t("g",(function(t){return e({url:"/sysHotelRooms/getSysHotelRoomsList",method:"get",params:t})}))}}}));

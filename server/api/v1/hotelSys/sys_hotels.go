@@ -24,7 +24,7 @@ type SysHotelsApi struct {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /sysHotels/createSysHotels [post]
 func (sysHotelsApi *SysHotelsApi) CreateSysHotels(c *gin.Context) {
-	var req hotelSysReq.HotelCreateUpdate
+	var req hotelSysReq.HotelSave
 	_ = c.ShouldBindJSON(&req)
 	req.UserId = utils.GetUserID(c)
 	if err := sysHotelsService.CreateSysHotels(req); err != nil {
@@ -85,9 +85,9 @@ func (sysHotelsApi *SysHotelsApi) DeleteSysHotelsByIds(c *gin.Context) {
 // @Produce application/json
 // @Param data body hotelSys.SysHotels true "更新SysHotels"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /sysHotels/updateSysHotels [put]
+// @Router /sysHotels/updateSysHotels [post]
 func (sysHotelsApi *SysHotelsApi) UpdateSysHotels(c *gin.Context) {
-	var sysHotels hotelSysReq.HotelCreateUpdate
+	var sysHotels hotelSysReq.HotelSave
 	_ = c.ShouldBindJSON(&sysHotels)
 	sysHotels.UserId = utils.GetUserID(c)
 	if err := sysHotelsService.UpdateSysHotels(sysHotels); err != nil {

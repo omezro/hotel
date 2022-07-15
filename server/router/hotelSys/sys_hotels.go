@@ -15,13 +15,13 @@ func (s *SysHotelsRouter) InitSysHotelsRouter(Router *gin.RouterGroup) {
 	sysHotelsRouterWithoutRecord := Router.Group("sysHotels")
 	var sysHotelsApi = v1.ApiGroupApp.HotelsysApiGroup.SysHotelsApi
 	{
-		sysHotelsRouter.POST("createSysHotels", sysHotelsApi.CreateSysHotels)   // 新建SysHotels
-		sysHotelsRouter.DELETE("deleteSysHotels", sysHotelsApi.DeleteSysHotels) // 删除SysHotels
+		sysHotelsRouter.POST("createSysHotels", sysHotelsApi.CreateSysHotels)             // 新建SysHotels
+		sysHotelsRouter.DELETE("deleteSysHotels", sysHotelsApi.DeleteSysHotels)           // 删除SysHotels
 		sysHotelsRouter.DELETE("deleteSysHotelsByIds", sysHotelsApi.DeleteSysHotelsByIds) // 批量删除SysHotels
-		sysHotelsRouter.PUT("updateSysHotels", sysHotelsApi.UpdateSysHotels)    // 更新SysHotels
+		sysHotelsRouter.POST("updateSysHotels", sysHotelsApi.UpdateSysHotels)             // 更新SysHotels
 	}
 	{
-		sysHotelsRouterWithoutRecord.GET("findSysHotels", sysHotelsApi.FindSysHotels)        // 根据ID获取SysHotels
-		sysHotelsRouterWithoutRecord.GET("getSysHotelsList", sysHotelsApi.GetSysHotelsList)  // 获取SysHotels列表
+		sysHotelsRouterWithoutRecord.GET("findSysHotels", sysHotelsApi.FindSysHotels)       // 根据ID获取SysHotels
+		sysHotelsRouterWithoutRecord.GET("getSysHotelsList", sysHotelsApi.GetSysHotelsList) // 获取SysHotels列表
 	}
 }
