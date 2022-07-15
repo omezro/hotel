@@ -3,6 +3,7 @@ module github.com/flipped-aurora/gin-vue-admin/server
 go 1.16
 
 require (
+	github.com/BurntSushi/toml v1.1.0 // indirect
 	github.com/aliyun/aliyun-oss-go-sdk v2.1.6+incompatible
 	github.com/aws/aws-sdk-go v1.42.27
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
@@ -46,7 +47,6 @@ require (
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.19
 	github.com/tklauser/go-sysconf v0.3.9 // indirect
 	github.com/unrolled/secure v1.0.7
-	github.com/urfave/cli/v2 v2.11.0 // indirect
 	github.com/xuri/excelize/v2 v2.4.1
 	go.uber.org/zap v1.16.0
 	golang.org/x/crypto v0.0.0-20220213190939-1e6e3497d506
@@ -56,6 +56,7 @@ require (
 	golang.org/x/text v0.3.7
 	golang.org/x/tools v0.1.11 // indirect
 	gopkg.in/ini.v1 v1.55.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/driver/mysql v1.0.1
 	gorm.io/driver/postgres v1.2.3
 	gorm.io/gorm v1.22.5
