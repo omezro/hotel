@@ -8,15 +8,8 @@
         <el-form-item label="经理电话">
           <el-input v-model="searchInfo.phone" placeholder="经理电话" />
         </el-form-item>
-        <el-form-item label="平台类型">
-          <el-select v-model="searchInfo.platform" clearable placeholder="请选择">
-            <el-option
-              v-for="item in platformOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
+        <el-form-item label="签约人">
+          <el-input v-model="searchInfo.signatory" placeholder="签约人" />
         </el-form-item>
         <el-form-item>
           <el-button size="small" type="primary" icon="search" @click="onSubmit">查询</el-button>
@@ -51,11 +44,17 @@
         <el-table-column align="left" label="id" min-width="60" prop="ID" />
         <el-table-column label="酒店名称" prop="name" width="180" />
         <el-table-column label="签约人" prop="signatory" width="120" />
-        <el-table-column label="上架平台" prop="platform" :formatter="platformFormat" width="120" />
+        <el-table-column label="上架平台" prop="platform" width="120" />
         <el-table-column label="酒店经理姓名" prop="manager" width="120" />
         <el-table-column label="电话" prop="phone" width="120" />
         <el-table-column label="按钮组" min-width="160">
           <template #default="scope">
+            <el-button
+              icon="document"
+              size="small"
+              type="text"
+              @click="toDetails(scope.row)"
+            >详情</el-button>
             <el-button
               icon="edit"
               size="small"
@@ -85,8 +84,8 @@
     </div>
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="新增酒店">
       <el-form
-        ref="addHotel"
-        :model="formData"
+        ref="formData"
+        :model="form"
         :rules="rules"
         size="medium"
         label-width="100px"
@@ -94,7 +93,7 @@
       >
         <el-form-item label="酒店名称" prop="name">
           <el-input
-            v-model="formData.name"
+            v-model="form.name"
             placeholder="请输入酒店名"
             :maxlength="20"
             show-word-limit
@@ -103,24 +102,18 @@
           />
         </el-form-item>
         <el-form-item label="登陆平台" prop="platform">
-          <!--          <el-radio-group v-model="formData.platform" style="width:45%;margin-left: 20px">
-            <el-radio-button :label="1" >携程</el-radio-button>
-            <el-radio-button :label="2" >飞猪</el-radio-button>
-            <el-radio-button :label="3" >美团</el-radio-button>
-          </el-radio-group>-->
-          <el-select v-model="formData.platform" placeholder="请选择登陆平台" clearable>
-            <el-option
-              v-for="(item, index) in platformOptions"
-              :key="index"
-              :label="item.label"
-              :value="item.value"
-              :disabled="item.disabled"
-            />
-          </el-select>
+          <div style="margin: 15px 0;" />
+          <el-checkbox-group v-model="form.platform" @change="handleCheckedPlatformChange">
+            <el-checkbox
+              v-for="platform in platformOptions"
+              :key="platform"
+              :label="platform"
+            >{{ platform }}</el-checkbox>
+          </el-checkbox-group>
         </el-form-item>
         <el-form-item label="经理姓名" prop="manager">
           <el-input
-            v-model="formData.manager"
+            v-model="form.manager"
             placeholder="请输入经理姓名"
             clearable
             style="width:85%"
@@ -128,7 +121,7 @@
         </el-form-item>
         <el-form-item label="结算方式" prop="settlementType">
           <el-input
-            v-model="formData.settlementType"
+            v-model="form.settlementType"
             placeholder="请输入结算方式"
             clearable
             style="width:85%"
@@ -136,7 +129,7 @@
         </el-form-item>
         <el-form-item label="转款账户" prop="transferAccount">
           <el-input
-            v-model="formData.transferAccount"
+            v-model="form.transferAccount"
             placeholder="请输入转款账户"
             clearable
             style="width:85%"
@@ -144,7 +137,7 @@
         </el-form-item>
         <el-form-item label="签约人" prop="signatory">
           <el-input
-            v-model="formData.signatory"
+            v-model="form.signatory"
             placeholder="请输入签约人"
             clearable
             style="width:85%"
@@ -152,7 +145,7 @@
         </el-form-item>
         <el-form-item label="催单电话" prop="phone">
           <el-input
-            v-model="formData.phone"
+            v-model="form.phone"
             placeholder="请输入催单电话"
             clearable
             style="width:85%"
@@ -160,14 +153,14 @@
         </el-form-item>
         <el-form-item label="备注" prop="mark">
           <el-input
-            v-model="formData.mark"
+            v-model="form.mark"
             placeholder="请输入备注"
             clearable
             style="width:85%"
           />
         </el-form-item>
-        <el-form-item
-          v-for="(room, index) in formData.rooms"
+<!--        <el-form-item
+          v-for="(room, index) in form.rooms"
           :key="room.key"
           :label="'房型' + (index+1)"
           :prop="'rooms.' + index + '.name'"
@@ -183,13 +176,13 @@
             <el-radio-button :label="3">双早</el-radio-button>
             <el-radio-button :label="4">套餐</el-radio-button>
           </el-radio-group>
-          <el-button style="width:15%" type="danger" plain @click.prevent="removeRoom(room)">删除</el-button>
-        </el-form-item>
+          <el-button v-if="dialogFormFoot" style="width:15%" type="danger" plain @click.prevent="removeRoom(room)">删除</el-button>
+        </el-form-item>-->
       </el-form>
       <template #footer>
-        <div class="dialog-footer">
+        <div v-if="dialogFormFoot" class="dialog-footer">
           <el-button @click="closeDialog">取 消</el-button>
-          <el-button type="primary" plain @click="addRoom">新增房型</el-button>
+<!--          <el-button type="primary" plain @click="addRoom">新增房型</el-button>-->
           <el-button type="primary" @click="enterDialog">确 定</el-button>
         </div>
       </template>
@@ -210,22 +203,43 @@ import {
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { toSQLLine } from '@/utils/stringFun'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const hotels = ref([])
-const formData = ref({
+const formData = ref(null)
+const form = ref({
   name: '',
-  platform: '',
+  platform: [],
   manager: '',
   settlementType: '',
   transferAccount: '',
   signatory: '',
   phone: '',
   mark: '',
-  rooms: [{
+  /* rooms: [{
     name: '',
-    food: '1'
-  }]
+    food: 1
+  }] */
 })
+const initForm = () => {
+  formData.value.resetFields()
+  form.value = {
+    name: '',
+    platform: [],
+    manager: '',
+    settlementType: '',
+    transferAccount: '',
+    signatory: '',
+    phone: '',
+    mark: '',
+   /*  rooms: [{
+      name: '',
+      food: 1
+    }] */
+  }
+}
 const rules = ref({
   name: [{
     required: true,
@@ -235,7 +249,7 @@ const rules = ref({
   platform: [{
     required: true,
     message: '请选择登陆平台',
-    trigger: 'change'
+    trigger: 'blur'
   }],
   manager: [{
     required: true,
@@ -266,41 +280,32 @@ const rules = ref({
     message: '手机号码有误',
     trigger: 'blur'
   }],
-  mark: [{
-    required: true,
-    message: '请输入备注',
-    trigger: 'blur'
-  }],
-  room: [{
+  /* room: [{
     required: true,
     message: '请输入房型',
     trigger: 'blur'
-  }],
+  }], */
 })
-const platformOptions = ref([{
-  'label': '携程',
-  'value': 1
-}, {
-  'label': '飞猪',
-  'value': 2
-}, {
-  'label': '美团',
-  'value': 3
-}])
+const platformOptions = ref(['携程', '飞猪', '美团'])
 
-const platformFormat = (row, column) => {
+const handleCheckedPlatformChange = (value) => {
+  console.log(value)
+}
+
+/* const platformFormat = (row, column) => {
   const pl = ['未知', '携程', '飞猪', '美团']
   if (row.platform > 3) {
     return '未知'
   }
   return pl[row.platform]
-}
+} */
 
 const page = ref(1)
 const total = ref(0)
 const pageSize = ref(10)
 const tableData = ref([])
 const searchInfo = ref({})
+const dialogFormFoot = ref(false)
 
 const onReset = () => {
   searchInfo.value = {}
@@ -343,23 +348,29 @@ const updateHotelById = async(row) => {
   const res = await findSysHotels({ ID: row.ID })
   type.value = 'update'
   if (res.code === 0) {
-    formData.value = res.data.resysHotels
+    form.value = res.data.resysHotels
     dialogFormVisible.value = true
+    dialogFormFoot.value = true
   }
 }
+const toDetails = async(row) => {
+  router.push({
+    name: 'hotelRoomCost',
+    params: {
+      id: row.ID,
+    },
+  })
+  /* const res = await findSysHotels({ ID: row.ID })
+  type.value = 'show'
+  if (res.code === 0) {
+    form.value = res.data.resysHotels
+    dialogFormVisible.value = true
+    dialogFormFoot.value = false
+  } */
+}
 const closeDialog = () => {
+  initForm()
   dialogFormVisible.value = false
-  formData.value = {
-    name: '',
-    platform: '',
-    manager: '',
-    settlementType: '',
-    transferAccount: '',
-    signatory: '',
-    phone: '',
-    mark: '',
-    rooms: []
-  }
 }
 const deleteHotelById = async(row) => {
   row.visible = false
@@ -409,45 +420,49 @@ const onDelete = async() => {
   }
 }
 const enterDialog = async() => {
-  let res
-  switch (type.value) {
-    case 'create':
-      res = await createSysHotels(formData.value)
-      break
-    case 'update':
-      res = await updateSysHotels(formData.value)
-      break
-    default:
-      res = await createSysHotels(formData.value)
-      break
-  }
+  formData.value.validate(async valid => {
+    if (valid) {
+      let res
+      switch (type.value) {
+        case 'create':
+          res = await createSysHotels(form.value)
+          break
+        case 'update':
+          res = await updateSysHotels(form.value)
+          break
+        default:
+          res = await createSysHotels(form.value)
+          break
+      }
 
-  if (res.code === 0) {
-    closeDialog()
-    getTableData()
-  }
+      if (res.code === 0) {
+        closeDialog()
+        getTableData()
+      }
+    }
+  })
 }
-const removeRoom = (item) => {
-  const index = formData.value.rooms.indexOf(item)
+/* const removeRoom = (item) => {
+  const index = form.value.rooms.indexOf(item)
   if (index === 0) {
     ElMessage({
       type: 'error',
       message: '最少需要输入一个房型'
     })
   } else {
-    formData.value.rooms.splice(index, 1)
+    form.value.rooms.splice(index, 1)
   }
 }
 const addRoom = () => {
-  formData.value.rooms.push({
-    value: '',
-    food: '1',
-    key: Date.now()
+  form.value.rooms.push({
+    name: '',
+    food: 1
   })
-}
+} */
 const openDialog = () => {
   type.value = 'create'
   dialogFormVisible.value = true
+  dialogFormFoot.value = true
 }
 
 </script>

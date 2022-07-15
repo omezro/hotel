@@ -55,11 +55,11 @@ export const deleteSysHotelsByIds = (data) => {
 // @Produce application/json
 // @Param data body model.SysHotels true "更新SysHotels"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /sysHotels/updateSysHotels [put]
+// @Router /sysHotels/updateSysHotels [post]
 export const updateSysHotels = (data) => {
   return service({
     url: '/sysHotels/updateSysHotels',
-    method: 'put',
+    method: 'post',
     data
   })
 }

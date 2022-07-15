@@ -10,7 +10,7 @@ type SysHotels struct {
 	global.GVA_MODEL
 	UserId          uint   `json:"user_id" gorm:"coloum:user_id;comment:用户id"`
 	Name            string `json:"name" form:"name" gorm:"column:name;comment:酒店名称;size:20;"`
-	Platform        int    `json:"platform" form:"platform" gorm:"column:platform;comment:登陆平台:1-携程,2-飞猪,3-美团;"`
+	Platform        string `json:"platform" form:"platform" gorm:"column:platform;comment:登陆平台:1-携程,2-飞猪,3-美团;"`
 	Manager         string `json:"manager" form:"manager" gorm:"column:manager;comment:酒店经理姓名;size:20;"`
 	SettlementType  string `json:"settlementType" form:"settlementType" gorm:"column:settlementType;comment:结算方式;size:100;"`
 	TransferAccount string `json:"transferAccount" form:"transferAccount" gorm:"column:transferAccount;comment:转账账户;size:190;"`

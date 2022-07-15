@@ -5,7 +5,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/hotelSys"
 	hotelSysReq "github.com/flipped-aurora/gin-vue-admin/server/model/hotelSys/request"
-	"gorm.io/gorm"
 )
 
 type SysHotelRoomsService struct {
@@ -16,13 +15,14 @@ var SysHotelRoomServiceApp = new(SysHotelRoomsService)
 // CreateSysHotelRooms 创建SysHotelRooms记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysHotelRoomsService *SysHotelRoomsService) CreateSysHotelRooms(sysHotelRooms []*hotelSys.SysHotelRooms) (err error) {
-	err = global.GVA_DB.Save(&sysHotelRooms).Error
+	var room hotelSys.SysHotelRooms
+	err = global.GVA_DB.Model(&room).Save(&sysHotelRooms).Error
 	return err
 }
 
 // DeleteRoomByHotelIds 根据hotelId删除所有rooms
-func (sysHotelRoomsService *SysHotelRoomsService) DeleteRoomByHotelIds(tx *gorm.DB, hotelIds []uint) (err error) {
-	return tx.Unscoped().Delete(&hotelSys.SysHotelRooms{}, "hotel_id IN ?", hotelIds).Error
+func (sysHotelRoomsService *SysHotelRoomsService) DeleteRoomByHotelIds(hotelIds []uint) (err error) {
+	return global.GVA_DB.Unscoped().Delete(&hotelSys.SysHotelRooms{}, "hotel_id IN ?", hotelIds).Error
 }
 
 // DeleteSysHotelRooms 删除SysHotelRooms记录
@@ -54,7 +54,7 @@ func (sysHotelRoomsService *SysHotelRoomsService) GetSysHotelRooms(id uint) (sys
 }
 
 func (sysHotelRoomsService *SysHotelRoomsService) GetSysHotelRoomsByHotelIds(hotelIds []uint) (list []hotelSys.SysHotelRooms, err error) {
-	err = global.GVA_DB.Where("hotel_id IN ?", hotelIds).Find(&list).Error
+	err = global.GVA_DB.Where("hotel_id IN ?", hotelIds).Order("created_at ASC").Find(&list).Error
 	return
 }
 
