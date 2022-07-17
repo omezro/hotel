@@ -27,15 +27,14 @@ func (sysHotelsService *SysHotelsService) CreateSysHotels(req hotelSysReq.HotelS
 			hotels.Platform = strings.Join(req.Platform, ",")
 		}
 
-		err = global.GVA_DB.Create(&hotels).Error
-		if err != nil {
+		return global.GVA_DB.Create(&hotels).Error
+		/*if err != nil {
 			return err
 		}
 		for i := range req.Rooms {
 			req.Rooms[i].HotelId = hotels.ID
 		}
-		err = SysHotelRoomServiceApp.CreateSysHotelRooms(req.Rooms)
-		return err
+		err = SysHotelRoomServiceApp.CreateSysHotelRooms(req.Rooms)*/
 	})
 
 }
@@ -48,7 +47,8 @@ func (sysHotelsService *SysHotelsService) DeleteSysHotels(sysHotels hotelSys.Sys
 		if err != nil {
 			return err
 		}
-		err = SysHotelRoomServiceApp.DeleteRoomByHotelIds([]uint{sysHotels.ID})
+		err = SysRoomCostsServiceApp.DeleteRoomCostByHotelIds([]uint{sysHotels.ID})
+		//err = SysHotelRoomServiceApp.DeleteRoomByHotelIds([]uint{sysHotels.ID})
 		return err
 	})
 }
@@ -65,7 +65,8 @@ func (sysHotelsService *SysHotelsService) DeleteSysHotelsByIds(userId uint, ids 
 		for i := range ids.Ids {
 			hIds = append(hIds, uint(ids.Ids[i]))
 		}
-		err = SysHotelRoomServiceApp.DeleteRoomByHotelIds(hIds)
+		//err = SysHotelRoomServiceApp.DeleteRoomByHotelIds(hIds)
+		err = SysRoomCostsServiceApp.DeleteRoomCostByHotelIds(hIds)
 		return err
 	})
 }
@@ -82,8 +83,8 @@ func (sysHotelsService *SysHotelsService) UpdateSysHotels(req hotelSysReq.HotelS
 		if len(req.Platform) > 0 {
 			hotels.Platform = strings.Join(req.Platform, ",")
 		}
-		err = global.GVA_DB.Save(&hotels).Error
-		if err != nil {
+		return global.GVA_DB.Save(&hotels).Error
+		/*if err != nil {
 			return err
 		}
 		err = SysHotelRoomServiceApp.DeleteRoomByHotelIds([]uint{hotels.ID})
@@ -93,7 +94,7 @@ func (sysHotelsService *SysHotelsService) UpdateSysHotels(req hotelSysReq.HotelS
 		for i := range req.Rooms {
 			req.Rooms[i].HotelId = hotels.ID
 		}
-		return SysHotelRoomServiceApp.CreateSysHotelRooms(req.Rooms)
+		return SysHotelRoomServiceApp.CreateSysHotelRooms(req.Rooms)*/
 	})
 }
 
@@ -110,7 +111,7 @@ func (sysHotelsService *SysHotelsService) GetSysHotels(id uint) (sysHotels hotel
 		return
 	}
 	sysHotels.HotelsView.Platform = strings.Split(hotels.Platform, ",")
-	sysHotels.Rooms, err = SysHotelRoomServiceApp.GetSysHotelRoomsByHotelIds([]uint{id})
+	//sysHotels.Rooms, err = SysHotelRoomServiceApp.GetSysHotelRoomsByHotelIds([]uint{id})
 	return
 }
 
@@ -120,7 +121,10 @@ func (sysHotelsService *SysHotelsService) GetSysHotelsInfoList(info hotelSysReq.
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&hotelSys.SysHotels{}).Where("user_id = ?", info.UserId)
+	db := global.GVA_DB.Model(&hotelSys.SysHotels{})
+	if info.AuthorityId != "1234" {
+		db = db.Where("user_id = ?", info.UserId)
+	}
 	var sysHotelss []hotelSys.SysHotels
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if len(info.Signatory) > 0 {

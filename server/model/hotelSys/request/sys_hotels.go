@@ -8,17 +8,18 @@ import (
 
 type SysHotelsSearch struct {
 	hotelSys.SysHotels
+	AuthorityId string
 	request.PageInfo
 }
 
 type HotelCreateUpdate struct {
 	hotelSys.SysHotels
-	Rooms []*hotelSys.SysHotelRooms
+	//Rooms []*hotelSys.SysHotelRooms
 }
 
 type HotelSave struct {
 	HotelsView
-	Rooms []*hotelSys.SysHotelRooms
+	//Rooms []*hotelSys.SysHotelRooms
 }
 
 type HotelsView struct {

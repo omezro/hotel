@@ -10,6 +10,8 @@ import (
 type SysRoomCostsService struct {
 }
 
+var SysRoomCostsServiceApp = new(SysRoomCostsService)
+
 // CreateSysRoomCosts 创建SysRoomCosts记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysRoomCostsService *SysRoomCostsService) CreateSysRoomCosts(sysRoomCosts hotelSys.SysRoomCosts) (err error) {
@@ -29,6 +31,11 @@ func (sysRoomCostsService *SysRoomCostsService) DeleteSysRoomCosts(sysRoomCosts 
 func (sysRoomCostsService *SysRoomCostsService) DeleteSysRoomCostsByIds(ids request.IdsReq) (err error) {
 	err = global.GVA_DB.Delete(&[]hotelSys.SysRoomCosts{}, "id in ?", ids.Ids).Error
 	return err
+}
+
+// DeleteRoomCostByHotelIds 根据hotelId删除所有rooms
+func (sysRoomCostsService *SysRoomCostsService) DeleteRoomCostByHotelIds(hotelIds []uint) (err error) {
+	return global.GVA_DB.Unscoped().Delete(&hotelSys.SysHotelRooms{}, "hotel_id IN ?", hotelIds).Error
 }
 
 // UpdateSysRoomCosts 更新SysRoomCosts记录

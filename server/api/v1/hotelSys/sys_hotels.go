@@ -131,7 +131,10 @@ func (sysHotelsApi *SysHotelsApi) FindSysHotels(c *gin.Context) {
 func (sysHotelsApi *SysHotelsApi) GetSysHotelsList(c *gin.Context) {
 	var pageInfo hotelSysReq.SysHotelsSearch
 	_ = c.ShouldBindQuery(&pageInfo)
-	pageInfo.UserId = utils.GetUserID(c)
+	//pageInfo.UserId = utils.GetUserID(c)
+	userInfo := utils.GetUserInfo(c)
+	pageInfo.UserId = userInfo.ID
+	pageInfo.AuthorityId = userInfo.AuthorityId
 	if list, total, err := sysHotelsService.GetSysHotelsInfoList(pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
