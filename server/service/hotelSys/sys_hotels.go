@@ -11,6 +11,11 @@ import (
 	"strings"
 )
 
+const (
+	UserAdmin           = "1234"
+	UserCustomerService = "9902"
+)
+
 type SysHotelsService struct {
 }
 
@@ -122,7 +127,7 @@ func (sysHotelsService *SysHotelsService) GetSysHotelsInfoList(info hotelSysReq.
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	db := global.GVA_DB.Model(&hotelSys.SysHotels{})
-	if info.AuthorityId != "1234" {
+	if info.AuthorityId != UserAdmin && info.AuthorityId != UserCustomerService {
 		db = db.Where("user_id = ?", info.UserId)
 	}
 	var sysHotelss []hotelSys.SysHotels
