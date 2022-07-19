@@ -234,7 +234,7 @@ const initForm = () => {
     signatory: '',
     phone: '',
     mark: '',
-   /*  rooms: [{
+    /*  rooms: [{
       name: '',
       food: 1
     }] */
@@ -354,10 +354,11 @@ const updateHotelById = async(row) => {
   }
 }
 const toDetails = async(row) => {
-  router.push({
+  await router.push({
     name: 'hotelRoomCost',
     params: {
       id: row.ID,
+      name: row.name,
     },
   })
   /* const res = await findSysHotels({ ID: row.ID })

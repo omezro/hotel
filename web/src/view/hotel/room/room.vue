@@ -37,7 +37,6 @@
         <el-table-column align="left" label="日期" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
-<!--        <el-table-column align="left" label="酒店ID" prop="hotelId" width="120" />-->
         <el-table-column align="left" label="房型名称" prop="name" width="120" />
         <el-table-column align="left" label="无早价格" prop="noBreakfast" width="120" />
         <el-table-column align="left" label="单早价格" prop="singleBreakfast" width="120" />
@@ -64,9 +63,6 @@
     </div>
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
       <el-form :model="formData" label-position="right" label-width="80px">
-<!--        <el-form-item label="酒店ID:">
-          <el-input v-model.number="formData.hotelId" clearableÏ placeholder="请输入" />
-        </el-form-item>-->
         <el-form-item label="房型名称:">
           <el-input v-model="formData.name" clearable placeholder="请输入" />
         </el-form-item>
@@ -116,8 +112,8 @@ import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 const route = useRoute()
 
-watch(() => route.params.id, (id) => {
-  searchInfo.value.hotelsID = Number(id)
+watch(() => route.params, () => {
+  searchInfo.value.hotelsID = Number(route.params.id)
   getTableData()
 })
 
