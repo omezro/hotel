@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="gva-form-box">
-      <el-form :model="formData" label-position="right" label-width="80px">
+      <el-form :model="formData" :rules="rules" label-position="right" label-width="80px">
         <el-form-item label="酒店ID:">
           <el-input v-model.number="formData.hotelId" clearable placeholder="请输入" />
         </el-form-item>
@@ -56,6 +56,35 @@ const formData = ref({
   singleBreakfast: 0,
   doubleBreakfast: 0,
   setMeal: 0,
+  mark: '',
+})
+
+const rules = ref({
+  name: [{
+    required: true,
+    message: '请输入房型名称',
+    trigger: 'blur'
+  }],
+  noBreakfast: [{
+    required: true,
+    message: '请输入无早价格',
+    trigger: 'blur'
+  }],
+  singleBreakfast: [{
+    required: true,
+    message: '请输入单早价格',
+    trigger: 'blur'
+  }],
+  doubleBreakfast: [{
+    required: true,
+    message: '请输入双早价格',
+    trigger: 'blur'
+  }],
+  setMeal: [{
+    required: true,
+    message: '请输入套餐价格',
+    trigger: 'blur'
+  }],
 })
 
 // 初始化方法

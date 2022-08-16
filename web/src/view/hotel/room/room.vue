@@ -42,6 +42,7 @@
         <el-table-column align="left" label="单早价格" prop="singleBreakfast" width="120" />
         <el-table-column align="left" label="双早价格" prop="doubleBreakfast" width="120" />
         <el-table-column align="left" label="套餐价格" prop="setMeal" width="120" />
+        <el-table-column align="left" label="房型备注" prop="mark" width="200" />
         <el-table-column align="left" label="按钮组">
           <template #default="scope">
             <el-button type="text" icon="edit" size="small" class="table-button" @click="updateSysRoomCostsFunc(scope.row)">变更</el-button>
@@ -61,22 +62,30 @@
         />
       </div>
     </div>
-    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
-      <el-form :model="formData" label-position="right" label-width="80px">
-        <el-form-item label="房型名称:">
-          <el-input v-model="formData.name" clearable placeholder="请输入" />
+    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="新增/修改房型">
+      <el-form
+        :model="formData"
+        :rules="rules"
+        label-position="right"
+        label-width="85px"
+      >
+        <el-form-item label="房型名称:" prop="name">
+          <el-input v-model="formData.name" clearable placeholder="请输入" style="width:90%" />
         </el-form-item>
-        <el-form-item label="无早价格:">
-          <el-input v-model.number="formData.noBreakfast" clearable placeholder="请输入" />
+        <el-form-item label="无早价格:" prop="noBreakfast">
+          <el-input v-model.number="formData.noBreakfast" clearable placeholder="请输入" style="width:90%" />
         </el-form-item>
-        <el-form-item label="单早价格:">
-          <el-input v-model.number="formData.singleBreakfast" clearable placeholder="请输入" />
+        <el-form-item label="单早价格:" prop="singleBreakfast">
+          <el-input v-model.number="formData.singleBreakfast" clearable placeholder="请输入" style="width:90%" />
         </el-form-item>
-        <el-form-item label="双早价格:">
-          <el-input v-model.number="formData.doubleBreakfast" clearable placeholder="请输入" />
+        <el-form-item label="双早价格:" prop="doubleBreakfast">
+          <el-input v-model.number="formData.doubleBreakfast" clearable placeholder="请输入" style="width:90%" />
         </el-form-item>
-        <el-form-item label="套餐价格:">
-          <el-input v-model.number="formData.setMeal" clearable placeholder="请输入" />
+        <el-form-item label="套餐价格:" prop="setMeal">
+          <el-input v-model.number="formData.setMeal" clearable placeholder="请输入" style="width:90%" />
+        </el-form-item>
+        <el-form-item label="房型备注:" prop="mark">
+          <el-input v-model="formData.mark" clearable placeholder="请输入" style="width:90%" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -121,10 +130,39 @@ watch(() => route.params, () => {
 const formData = ref({
   hotelId: 0,
   name: '',
-  noBreakfast: 0,
-  singleBreakfast: 0,
-  doubleBreakfast: 0,
-  setMeal: 0,
+  noBreakfast: '',
+  singleBreakfast: '',
+  doubleBreakfast: '',
+  setMeal: '',
+  mark: '',
+})
+
+const rules = ref({
+  name: [{
+    required: true,
+    message: '请输入房型名称',
+    trigger: 'blur'
+  }],
+  noBreakfast: [{
+    required: true,
+    message: '请输入无早价格',
+    trigger: 'blur'
+  }],
+  singleBreakfast: [{
+    required: true,
+    message: '请输入单早价格',
+    trigger: 'blur'
+  }],
+  doubleBreakfast: [{
+    required: true,
+    message: '请输入双早价格',
+    trigger: 'blur'
+  }],
+  setMeal: [{
+    required: true,
+    message: '请输入套餐价格',
+    trigger: 'blur'
+  }],
 })
 
 // =========== 表格控制部分 ===========
@@ -272,10 +310,11 @@ const closeDialog = () => {
   formData.value = {
     hotelId: 0,
     name: '',
-    noBreakfast: 0,
-    singleBreakfast: 0,
-    doubleBreakfast: 0,
-    setMeal: 0,
+    noBreakfast: '',
+    singleBreakfast: '',
+    doubleBreakfast: '',
+    setMeal: '',
+    mark: '',
   }
 }
 // 弹窗确定

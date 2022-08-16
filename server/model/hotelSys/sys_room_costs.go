@@ -14,6 +14,7 @@ type SysRoomCosts struct {
 	SingleBreakfast *int   `json:"singleBreakfast" form:"singleBreakfast" gorm:"column:single_breakfast;comment:单早价格;size:10;"`
 	DoubleBreakfast *int   `json:"doubleBreakfast" form:"doubleBreakfast" gorm:"column:double_breakfast;comment:双早价格;size:10;"`
 	SetMeal         *int   `json:"setMeal" form:"setMeal" gorm:"column:set_meal;comment:套餐价格;size:10;"`
+	Mark            string `json:"mark" form:"mark" gorm:"column:mark;comment:房型备注;size:255;"`
 }
 
 // TableName SysRoomCosts 表名
